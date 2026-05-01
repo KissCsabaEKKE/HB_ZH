@@ -393,19 +393,20 @@ general_adatmatrix_feladat <- function(seed) {
     "# - ", tema$num3_nev, ": normális eloszlás, átlag = ", tema$num3_atlag, ", szórás = ", tema$num3_szoras, "\n",
     "#\n",
     "# Feladatok:\n",
-    "# - Ellenőrizze az adat_adatmatrix szerkezetét, oszlopneveit és első néhány sorát. (2 pont)\n",
     "# - Készítsen boxplot ábrát a(z) ", boxplot_fo_num, " változóra a(z) ", boxplot_fo_kat, " kategóriái szerint. (2 pont)\n",
     "# - Szűrje ki az adatokat az alábbi feltételek szerint: ",
     tema$kat1_nev, " = ", felt1_kat1, ", ",
     tema$kat2_nev, " = ", felt1_kat2, ". ",
-    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt1_num, " változóról. (3 pont)\n",
+    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt1_num, " változóról a(z) ", boxplot_fo_kat, " kategóriái szerint. (3 pont)\n",
+    "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n",
     "# - Szűrje ki az adatokat az alábbi feltételek szerint: ",
     tema$kat1_nev, " = ", felt2_kat1, ", ",
     tema$kat2_nev, " = ", felt2_kat2, ", ",
     tema$kat3_nev, " = ", felt2_kat3, ", ",
     tema$num1_nev, " < ", num1_hatar, ", ",
     tema$num2_nev, " > ", num2_hatar, ". ",
-    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt2_num, " változóról. (3 pont)\n\n"
+    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt2_num, " változóról a(z) ", boxplot_fo_kat, " kategóriái szerint. (3 pont)\n",
+    "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n\n"
   )
   
   list(
