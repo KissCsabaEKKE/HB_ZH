@@ -368,12 +368,47 @@ general_adatmatrix_feladat <- function(seed) {
   num1_hatar <- round(quantile(adat[[tema$num1_nev]], probs = sample(c(0.25, 0.35, 0.40), 1)), 2)
   num2_hatar <- round(quantile(adat[[tema$num2_nev]], probs = sample(c(0.60, 0.65, 0.75), 1)), 2)
   
-  # Ábrázolandó változók random kiválasztása
-  boxplot_fo_num <- sample(c(tema$num1_nev, tema$num2_nev, tema$num3_nev), 1)
-  boxplot_fo_kat <- sample(c(tema$kat1_nev, tema$kat2_nev, tema$kat3_nev), 1)
-  
-  boxplot_szurt1_num <- sample(c(tema$num1_nev, tema$num2_nev, tema$num3_nev), 1)
-  boxplot_szurt2_num <- sample(c(tema$num1_nev, tema$num2_nev, tema$num3_nev), 1)
+# ============================================================
+# VÁLTOZÓK KIVÁLASZTÁSA LOGIKÁVAL
+# ============================================================
+
+kat_nevek <- c(tema$kat1_nev, tema$kat2_nev, tema$kat3_nev)
+num_nevek <- c(tema$num1_nev, tema$num2_nev, tema$num3_nev)
+
+# --- FŐ BOXPLOT (itt még bármi lehet)
+boxplot_fo_num <- sample(num_nevek, 1)
+boxplot_fo_kat <- sample(kat_nevek, 1)
+
+# ============================================================
+# 1. SZŰRÉS (kat1 és kat2 alapján történik)
+# → ezért boxplot csak kat3 szerint lehet
+# ============================================================
+
+szures1_kat_nevek <- c(tema$kat1_nev, tema$kat2_nev)
+
+boxplot_szurt1_kat <- setdiff(kat_nevek, szures1_kat_nevek)
+boxplot_szurt1_kat <- sample(boxplot_szurt1_kat, 1)
+
+boxplot_szurt1_num <- sample(num_nevek, 1)
+
+# ============================================================
+# 2. SZŰRÉS (itt NE szűrj mindhárom kategóriára!)
+# → válassz ki 2 kategóriát a 3-ból
+# ============================================================
+
+szures2_kat_nevek <- sample(kat_nevek, 2, replace = FALSE)
+
+boxplot_szurt2_kat <- setdiff(kat_nevek, szures2_kat_nevek)
+boxplot_szurt2_kat <- sample(boxplot_szurt2_kat, 1)
+
+# A konkrét szűrési értékek is ehhez igazodjanak
+felt2_kat1_nev <- szures2_kat_nevek[1]
+felt2_kat2_nev <- szures2_kat_nevek[2]
+
+felt2_kat1_ertek <- sample(adat[[felt2_kat1_nev]], 1)
+felt2_kat2_ertek <- sample(adat[[felt2_kat2_nev]], 1)
+
+boxplot_szurt2_num <- sample(num_nevek, 1)
   
   szoveg <- paste0(
     "# Adatmátrix, szűrés és boxplot feladat\n",
@@ -397,15 +432,14 @@ general_adatmatrix_feladat <- function(seed) {
     "# - Szűrje ki az adatokat az alábbi feltételek szerint: ",
     tema$kat1_nev, " = ", felt1_kat1, ", ",
     tema$kat2_nev, " = ", felt1_kat2, ". ",
-    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt1_num, " változóról a(z) ", boxplot_fo_kat, " kategóriái szerint. (3 pont)\n",
+    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt1_num, " változóról a(z) ", boxplot_szurt1_kat, " kategóriái szerint. (3 pont)\n",
     "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n",
     "# - Szűrje ki az adatokat az alábbi feltételek szerint: ",
-    tema$kat1_nev, " = ", felt2_kat1, ", ",
-    tema$kat2_nev, " = ", felt2_kat2, ", ",
-    tema$kat3_nev, " = ", felt2_kat3, ", ",
+    felt2_kat1_nev, " = ", felt2_kat1_ertek, ", ",
+    felt2_kat2_nev, " = ", felt2_kat2_ertek, ", ",
     tema$num1_nev, " < ", num1_hatar, ", ",
     tema$num2_nev, " > ", num2_hatar, ". ",
-    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt2_num, " változóról a(z) ", boxplot_fo_kat, " kategóriái szerint. (3 pont)\n",
+    "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt2_num, " változóról a(z) ", boxplot_szurt2_kat, " kategóriái szerint. (3 pont)\n",
     "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n\n"
   )
   
