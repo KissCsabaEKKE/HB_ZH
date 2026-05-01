@@ -333,7 +333,7 @@ general_adatmatrix_feladat <- function(seed) {
   
   bevezeto <- sample(tema$bevezetok, 1)
   
-  n <- sample(seq(1600, 2600, by = 100), 1)
+  n <- sample(seq(4000, 8000, by = 200), 1)
   
   kat1 <- sample(tema$kat1, n, replace = TRUE)
   kat2 <- sample(tema$kat2, n, replace = TRUE)
