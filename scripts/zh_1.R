@@ -379,7 +379,7 @@ general_adatmatrix_feladat <- function(seed) {
     "# Adatmátrix, szűrés és boxplot feladat\n",
     "#\n",
     "# ", bevezeto, "\n",
-    "# Az adatállomány már előre létrehozásra került, az adatmatrix_feladat nevű data.frame-ben található.\n",
+    "# Az adatállomány már előre létrehozásra került, az adat_adatmatrix_feladat nevű data.frame-ben található.\n",
     "# Az adatbázis ", n, " megfigyelést tartalmaz. A változók között három kategóriás és három folytonos változó szerepel.\n",
     "#\n",
     "# Kategóriás változók:\n",
@@ -393,7 +393,7 @@ general_adatmatrix_feladat <- function(seed) {
     "# - ", tema$num3_nev, ": normális eloszlás, átlag = ", tema$num3_atlag, ", szórás = ", tema$num3_szoras, "\n",
     "#\n",
     "# Feladatok:\n",
-    "# - Ellenőrizze az adatmatrix_feladat szerkezetét, oszlopneveit és első néhány sorát. (2 pont)\n",
+    "# - Ellenőrizze az adat_adatmatrix_feladat szerkezetét, oszlopneveit és első néhány sorát. (2 pont)\n",
     "# - Készítsen boxplot ábrát a(z) ", boxplot_fo_num, " változóra a(z) ", boxplot_fo_kat, " kategóriái szerint. (2 pont)\n",
     "# - Szűrje ki az adatokat az alábbi feltételek szerint: ",
     tema$kat1_nev, " = ", felt1_kat1, ", ",
@@ -418,22 +418,21 @@ general_adatmatrix_feladat <- function(seed) {
 # FELADATLISTA ÖSSZEÁLLÍTÁSA
 # ============================================================
 
-# Ez biztosan bekerül
-fix_feladatok <- c("korrelacio")
+# Két kötelező feladat
+fix_feladatok <- c("korrelacio", "adatmatrix")
 
-# Ide később kerül majd a második fix feladat
-masodik_fix_feladat <- c("adatmatrix")
-
-# Ide később kerülnek a választható random feladatok
+# Később ide kerülnek majd a választható random feladatok
 random_feladatok <- character(0)
 
-# Későbbi végleges logika majd ilyen lesz:
-# fix_feladatok <- c("korrelacio", "masodik_fix")
-# random_feladatok <- c("tesztvalasztas", "adatmatrix", "szures", "diverzitas", "regresszio")
+# Jelenleg csak a két fix feladat kerül be
+# Később majd ez lesz:
 # valasztott_random <- sample(random_feladatok, 2, replace = FALSE)
 # vegso_feladatok <- sample(c(fix_feladatok, valasztott_random), 4)
 
 vegso_feladatok <- fix_feladatok
+
+# A feladatok sorrendjét már most is összekeverhetjük
+vegso_feladatok <- sample(vegso_feladatok, length(vegso_feladatok), replace = FALSE)
 
 # ============================================================
 # FELADATOK GENERÁLÁSA
@@ -455,8 +454,22 @@ for (feladat in vegso_feladatok) {
       kor$szoveg
     )
     
-    # Tanári célra, de nem kerül ki automatikusan, mert nem adat_ előtagú
+    # Tanári célra, nem kerül ki automatikusan, mert nem adat_ előtagú
     megoldas_korrelacio <- kor$megoldas
+  }
+  
+  if (feladat == "adatmatrix") {
+    
+    adatmatrix <- general_adatmatrix_feladat(seed + feladat_sorszam)
+    
+    # Fontos: adat_ előtag kell, hogy a HB_DATA kitegye az Environment-be
+    adat_adatmatrix <- adatmatrix$adat
+    
+    feladat_szoveg <- paste0(
+      feladat_szoveg,
+      "# ", feladat_sorszam, ". feladat\n",
+      adatmatrix$szoveg
+    )
   }
   
   feladat_sorszam <- feladat_sorszam + 1
