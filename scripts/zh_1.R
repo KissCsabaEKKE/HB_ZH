@@ -741,7 +741,8 @@ general_egymintas_feladat <- function(seed) {
     "# - Fogalmazza meg a megfelelő H0 és H1 hipotéziseket mindkét mintára. (2 pont)\n",
     "# - Válassza ki és végezze el a megfelelő statisztikai próbát mindkét adatsorra. (3 pont)\n",
     "# - Hasonlítsa össze, melyik csoport tér el jobban a saját referenciaértékétől. (1 pont)\n",
-    "# - Értelmezze az eredményeket biológiai szempontból. (1 pont)\n\n"
+    "# - Értelmezze az eredményeket biológiai szempontból. (1 pont)\n",
+    "# ============================================================\n\n"
   )
   
   megoldas <- data.frame(
