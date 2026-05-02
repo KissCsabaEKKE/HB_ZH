@@ -1385,11 +1385,195 @@ general_paros_feladat <- function(seed) {
 }
 
 # ============================================================
+# ÁBRAÉRTELMEZÉSI FELADAT – OSZLOPDIAGRAM
+# Csak az ábra jelenik meg, nyers adat NEM kerül ki.
+# ============================================================
+
+general_abra_feladat <- function(seed) {
+  
+  set.seed(seed + 606)
+  
+  temak <- list(
+    
+    list(
+      cim = "Nyugdíjasklub retrókoncert elégedettségi felmérése",
+      bevezeto = paste0(
+        "Egy egri nyugdíjasklub könnyűzenei estet szervezett a bentlakóknak. ",
+        "A fellépő személye komoly vitát váltott ki, mert a szervezők szerint a retró hangulat minden korosztálynak jót tesz, ",
+        "a résztvevők szerint viszont ez csak akkor igaz, ha a hangerő nem haladja meg a leveseskanál csörgésének szintjét. ",
+        "A koncert után a résztvevőket megkérték, hogy pontozzák az előadás színvonalát."
+      ),
+      csoport1 = "Bácsik",
+      csoport2 = "Nénik",
+      xlab = "Pontozás eredményei",
+      ylab = "Válaszadók száma",
+      meres = "koncertet"
+    ),
+    
+    list(
+      cim = "Egyetemi menza kísérleti ebédjének értékelése",
+      bevezeto = paste0(
+        "Az egyetemi menzán új, egészségtudatos menüt vezettek be, amelynek fő attrakciója a céklás-zabos rakott brokkoli volt. ",
+        "A konyha szerint ez modern táplálkozásbiológiai szemléletet tükrözött, a hallgatók szerint viszont inkább bátorságpróba volt. ",
+        "Az ebéd után a résztvevőket megkérték, hogy értékeljék az étel élvezeti értékét."
+      ),
+      csoport1 = "Biológusok",
+      csoport2 = "Sporttudományosok",
+      xlab = "Értékelés eredményei",
+      ylab = "Válaszadók száma",
+      meres = "menzás ebédet"
+    ),
+    
+    list(
+      cim = "Macskagazdák kiszolgálási teljesítményének értékelése",
+      bevezeto = paste0(
+        "Egy viselkedésbiológiai ihletésű felmérésben macskagazdák önbevallásos teljesítményét vizsgálták. ",
+        "A kérdőív alapján a gazdáknak azt kellett értékelniük, mennyire érzik úgy, hogy macskájuk elégedett lenne a napi kiszolgálással. ",
+        "A kutatók természetesen nem kérdezték meg közvetlenül a macskákat, mert azok csak lenézően pislogtak volna."
+      ),
+      csoport1 = "Kezdő gazdák",
+      csoport2 = "Rutinos gazdák",
+      xlab = "Értékelés eredményei",
+      ylab = "Válaszadók száma",
+      meres = "gazdai teljesítményt"
+    ),
+    
+    list(
+      cim = "Denevérbarát éjszakai túra értékelése",
+      bevezeto = paste0(
+        "Egy természetvédelmi program keretében éjszakai denevérmegfigyelő túrát szerveztek. ",
+        "A résztvevők egy része lenyűgözőnek találta a denevérek röptét, mások viszont főként azt jegyezték meg, hogy a sötétben minden faág sokkal közelebb van, mint nappal. ",
+        "A program végén a túra élményértékét pontozták."
+      ),
+      csoport1 = "Hallgatók",
+      csoport2 = "Oktatók",
+      xlab = "Pontozás eredményei",
+      ylab = "Válaszadók száma",
+      meres = "éjszakai túrát"
+    ),
+    
+    list(
+      cim = "Óvodai zöldségnap sikerességének felmérése",
+      bevezeto = paste0(
+        "Egy óvodai egészségnapon különböző zöldségeket mutattak be a gyerekeknek. ",
+        "A szervezők szerint a brokkoli és a karalábé kiváló pedagógiai eszköz, a gyerekek szerint viszont a répa legalább felismerhető volt. ",
+        "A foglalkozás után játékos pontozással értékelték, mennyire tetszett a program."
+      ),
+      csoport1 = "Katica csoport",
+      csoport2 = "Süni csoport",
+      xlab = "Pontozás eredményei",
+      ylab = "Válaszadók száma",
+      meres = "zöldségnapot"
+    ),
+    
+    list(
+      cim = "Hallgatói terepgyakorlat komfortértékelése",
+      bevezeto = paste0(
+        "Egy biológiai terepgyakorlat után a hallgatók értékelték a program komfortszintjét. ",
+        "A terepgyakorlat szakmailag sikeres volt, bár néhány résztvevő szerint a szúnyogok túl aktívan vettek részt az adatgyűjtésben. ",
+        "A kérdőívben azt pontozták, mennyire volt elviselhető a terepi munka."
+      ),
+      csoport1 = "Elsőévesek",
+      csoport2 = "Felsőbb évesek",
+      xlab = "Értékelés eredményei",
+      ylab = "Válaszadók száma",
+      meres = "terepgyakorlatot"
+    )
+  )
+  
+  tema <- sample(temak, 1)[[1]]
+  
+  pont_kategoriak <- 1:sample(4:6, 1)
+  k <- length(pont_kategoriak)
+  
+  csoport1_gyak <- sample(1:10, k, replace = TRUE)
+  csoport2_gyak <- sample(1:10, k, replace = TRUE)
+  
+  # Ne legyen teljesen azonos a két csoport gyakorisági sora
+  while (all(csoport1_gyak == csoport2_gyak)) {
+    csoport2_gyak <- sample(1:10, k, replace = TRUE)
+  }
+  
+  gyak_matrix <- rbind(csoport1_gyak, csoport2_gyak)
+  rownames(gyak_matrix) <- c(tema$csoport1, tema$csoport2)
+  colnames(gyak_matrix) <- pont_kategoriak
+  
+  bp <- barplot(
+    gyak_matrix,
+    beside = TRUE,
+    names.arg = pont_kategoriak,
+    main = tema$cim,
+    xlab = tema$xlab,
+    ylab = tema$ylab,
+    ylim = c(0, max(gyak_matrix) + 3),
+    legend.text = rownames(gyak_matrix),
+    args.legend = list(x = "topright", bty = "n"),
+    col = c("steelblue", "orange"),
+    las = 1
+  )
+  
+  text(
+    x = bp,
+    y = gyak_matrix + 0.4,
+    labels = gyak_matrix,
+    cex = 0.8
+  )
+  
+  kuszob <- sample(pont_kategoriak[-length(pont_kategoriak)], 1)
+  stat_csoport <- sample(c(tema$csoport1, tema$csoport2, "teljes csoport"), 1)
+  stat_tipus <- sample(c("gyakoriságának", "relatív gyakoriságának"), 1)
+  stat_muvelet <- sample(c("szórása", "varianciája", "átlaga", "mediánja", "minimuma", "maximuma"), 1)
+  pie_csoport <- sample(c(tema$csoport1, tema$csoport2, "teljes csoport"), 1)
+  
+  szoveg <- paste0(
+    "# Ábraértelmezési feladat\n",
+    "#\n",
+    "# ", tema$bevezeto, "\n",
+    "# A felmérés összesített eredményeit az RStudio Plots paneljén látható oszlopdiagram tartalmazza.\n",
+    "#\n",
+    "# Feladatok:\n",
+    "# - Olvassa le az eredményeket az oszlopdiagramról. (1 pont)\n",
+    "# - Számolja ki és adja meg a(z) ", tema$csoport1, " és a(z) ", tema$csoport2,
+    " csoportlétszámát külön, illetve a teljes válaszadói létszámot. (1 pont)\n",
+    "# - Számolja ki és adja meg a(z) ", tema$csoport1, " és a(z) ", tema$csoport2,
+    " csoportokra vonatkozó gyakoriságot és relatív gyakoriságot, illetve a teljes csoportra vonatkozó gyakoriságot és relatív gyakoriságot az egyes eredmények függvényében. (2 pont)\n",
+    "# - Készítsen az eredményekből egy adatmátrixot a következő oszlopokkal: Eredmények, ",
+    tema$csoport1, " gyakorisága, ", tema$csoport1, " relatív gyakorisága, ",
+    tema$csoport2, " gyakorisága, ", tema$csoport2, " relatív gyakorisága, Teljes gyakoriság, Teljes relatív gyakoriság. (2 pont)\n",
+    "# - Emelje ki az adatmátrixból azokat, akik ", kuszob,
+    " pontnál magasabbra értékelték a(z) ", tema$meres,
+    ", majd adja meg, hogy összesen hány válaszadó tartozik ide. (1 pont)\n",
+    "# - Számolja ki és adja meg mennyi a(z) ", stat_csoport, " ", stat_tipus, " ", stat_muvelet, ". (1 pont)\n",
+    "# - Ábrázolja kördiagramon a(z) ", pie_csoport, " gyakorisági vagy relatív gyakorisági megoszlását. (1 pont)\n",
+    "# ============================================================\n\n"
+  )
+  
+  megoldas <- list(
+    cim = tema$cim,
+    gyakorisag = gyak_matrix,
+    teljes_gyakorisag = colSums(gyak_matrix),
+    rel_csoport1 = csoport1_gyak / sum(csoport1_gyak),
+    rel_csoport2 = csoport2_gyak / sum(csoport2_gyak),
+    rel_teljes = colSums(gyak_matrix) / sum(gyak_matrix),
+    kuszob = kuszob,
+    stat_csoport = stat_csoport,
+    stat_tipus = stat_tipus,
+    stat_muvelet = stat_muvelet,
+    pie_csoport = pie_csoport
+  )
+  
+  list(
+    szoveg = szoveg,
+    megoldas = megoldas
+  )
+}
+
+# ============================================================
 # FELADATLISTA ÖSSZEÁLLÍTÁSA
 # ============================================================
 
 # Két kötelező feladat
-fix_feladatok <- c("korrelacio", "adatmatrix")
+fix_feladatok <- c("korrelacio", "adatmatrix", "abra")
 
 # Nem fix / választható feladatok
 # Most még csak az egymintás referenciaértékes feladat van benne,
@@ -1481,6 +1665,18 @@ for (feladat in vegso_feladatok) {
   )
   
   megoldas_paros <- paros$megoldas
+}
+  if (feladat == "abra") {
+  
+  abra <- general_abra_feladat(seed + feladat_sorszam)
+  
+  feladat_szoveg <- paste0(
+    feladat_szoveg,
+    "# ", feladat_sorszam, ". feladat\n",
+    abra$szoveg
+  )
+  
+  megoldas_abra <- abra$megoldas
 }
   
   feladat_sorszam <- feladat_sorszam + 1
