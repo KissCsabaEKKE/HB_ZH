@@ -1033,7 +1033,7 @@ general_ketmintas_feladat <- function(seed) {
     "#\n",
     "# ", tema$bevezeto, "\n",
     "# A vizsgált változó: ", tema$valtozo, " (", tema$egyseg, ").\n",
-    "# Az adatok az adat_ketmintas nevű data.frame-ben találhatók.\n",
+    "# Az adatok az adat_teszt nevű data.frame-ben találhatók.\n",
     "#\n",
     "# Fontos: az A és B minták egymástól függetlenek. Nem ugyanazon személyek ismételt mérései.\n",
     "# Ezért különbségen alapuló vagy párosított próbát itt nem szabad alkalmazni.\n",
@@ -1059,12 +1059,12 @@ general_ketmintas_feladat <- function(seed) {
     "# B minta: ", paste(K2_B, collapse = ", "), "\n",
     "#\n",
     "# Feladatok:\n",
-    "# - Olvassa le az adatokat, és ellenőrizze a csoportok, minták elemszámát. (1 pont)\n",
+    "# - Ábrázolja mind a négy adatsort egy közös boxplot ábrán. (1 pont)\n",
     "# - Vizsgálja meg mind a négy adatsor normalitását. (2 pont)\n",
-    "# - Fogalmazza meg a megfelelő null- és alternatív hipotéziseket a K1 és K2 csoport összehasonlításához. (2 pont)\n",
+    "# - Fogalmazza meg a megfelelő H0 és H1 hipotéziseket a K1 és K2 csoport összehasonlításához. (2 pont)\n",
     "# - Hasonlítsa össze a K1 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
     "# - Hasonlítsa össze a K2 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
-    "# - Ábrázolja mind a négy adatsort egy közös boxplot ábrán, és röviden értelmezze az eredményeket. (1 pont)\n\n"
+    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n\n"
   )
   
   # ------------------------------------------------------------
@@ -1073,17 +1073,20 @@ general_ketmintas_feladat <- function(seed) {
   # ------------------------------------------------------------
   
   megoldas <- data.frame(
-    Csoport = c("K1", "K2"),
-    Normalitas_generalt = c(K1_normalis, K2_normalis),
-    Javasolt_proba = c(
-      ifelse(K1_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba"),
-      ifelse(K2_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba")
-    ),
-    Shapiro_A_p = c(shapiro.test(K1_A)$p.value, shapiro.test(K2_A)$p.value),
-    Shapiro_B_p = c(shapiro.test(K1_B)$p.value, shapiro.test(K2_B)$p.value),
-    T_teszt_p = c(t.test(K1_A, K1_B)$p.value, t.test(K2_A, K2_B)$p.value),
-    MWW_p = c(wilcox.test(K1_A, K1_B)$p.value, wilcox.test(K2_A, K2_B)$p.value)
+  Csoport = c("K1", "K2"),
+  Normalitas_generalt = c(K1_normalis, K2_normalis),
+  Javasolt_proba = c(
+    ifelse(K1_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba"),
+    ifelse(K2_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba")
+  ),
+  Shapiro_A_p = c(shapiro.test(K1_A)$p.value, shapiro.test(K2_A)$p.value),
+  Shapiro_B_p = c(shapiro.test(K1_B)$p.value, shapiro.test(K2_B)$p.value),
+  T_teszt_p = c(t.test(K1_A, K1_B)$p.value, t.test(K2_A, K2_B)$p.value),
+  MWW_p = c(
+    suppressWarnings(wilcox.test(K1_A, K1_B, exact = FALSE)$p.value),
+    suppressWarnings(wilcox.test(K2_A, K2_B, exact = FALSE)$p.value)
   )
+)
   
   list(
     adat = adat_teszt,
