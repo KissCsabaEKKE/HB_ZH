@@ -450,23 +450,327 @@ boxplot_szurt2_num <- sample(num_nevek, 1)
 }
 
 # ============================================================
+# TESZTVÁLASZTÁS FELADAT – EGYMINTÁS PRÓBÁK
+# Két adatsor, eltérő mintaszám, normális eloszlás.
+# A két adatsort külön-külön kell referenciaértékhez hasonlítani.
+# ============================================================
+
+general_egymintas_feladat <- function(seed) {
+  
+  set.seed(seed + 303)
+  
+  mu_tipus <- sample(c("azonos_mu", "kulon_mu"), 1)
+  
+  n1 <- sample(18:28, 1)
+  n2 <- sample(29:40, 1)
+  
+  if (sample(c(TRUE, FALSE), 1)) {
+    temp <- n1
+    n1 <- n2
+    n2 <- temp
+  }
+  
+  # ------------------------------------------------------------
+  # AZONOS MU TÉMÁK
+  # ------------------------------------------------------------
+  
+  azonos_mu_temak <- list(
+    
+    nyugalmi_pulzus = list(
+      csoport1 = "Sporttudomány szakos hallgatók",
+      csoport2 = "Biológia szakos hallgatók",
+      valtozo = "nyugalmi pulzus",
+      egyseg = "ütés/perc",
+      mu = sample(66:74, 1),
+      sd = runif(1, 4, 7),
+      bevezeto = "Egy élettani jellegű egyetemi vizsgálat során két hallgatói csoport nyugalmi pulzusát mérték. A kutatók arra voltak kíváncsiak, hogy a két csoport pulzusértékei külön-külön megfelelnek-e a szakirodalomban megadott, egészséges fiatal felnőttekre jellemző átlagos értéknek. A két csoportból eltérő számú hallgatót vontak be a mérésbe."
+    ),
+    
+    alvasido = list(
+      csoport1 = "Kollégista hallgatók",
+      csoport2 = "Bejáró hallgatók",
+      valtozo = "napi alvásidő",
+      egyseg = "óra",
+      mu = round(runif(1, 6.8, 7.5), 1),
+      sd = runif(1, 0.7, 1.2),
+      bevezeto = "Egy hallgatói életmódvizsgálat során két különböző lakhatási helyzetű csoport napi alvásidejét rögzítették. A kutatók azt szerették volna megvizsgálni, hogy az egyes csoportok átlagos alvásideje megfelel-e az ajánlott napi értéknek. A mérések önbevalláson alapultak, de az adatokat oktatási célú statisztikai elemzésre használták fel."
+    ),
+    
+    reakcioido = list(
+      csoport1 = "Reggeli mérésen résztvevő hallgatók",
+      csoport2 = "Délutáni mérésen résztvevő hallgatók",
+      valtozo = "reakcióidő",
+      egyseg = "ms",
+      mu = sample(seq(240, 280, by = 5), 1),
+      sd = runif(1, 18, 35),
+      bevezeto = "Egy kognitív teljesítményt vizsgáló gyakorlaton hallgatók reakcióidejét mérték egyszerű vizuális ingerre. A kutatók két külön mérési időpontban gyűjtöttek adatokat, majd azt vizsgálták, hogy az egyes minták átlagos reakcióideje eltér-e a szakirodalmi referenciaértéktől."
+    ),
+    
+    lepesszam = list(
+      csoport1 = "Elsőéves hallgatók",
+      csoport2 = "Felsőbb éves hallgatók",
+      valtozo = "napi lépésszám",
+      egyseg = "lépés",
+      mu = sample(c(7000, 8000, 9000, 10000), 1),
+      sd = runif(1, 900, 1800),
+      bevezeto = "Egy fizikai aktivitással kapcsolatos felmérés során két hallgatói csoport napi lépésszámát modellezték. A cél annak megállapítása volt, hogy az egyes csoportok átlagos napi aktivitása eléri-e az ajánlott, szakirodalomban gyakran használt referenciaértéket."
+    ),
+    
+    testhomerseklet = list(
+      csoport1 = "Délelőtti mérésen résztvevők",
+      csoport2 = "Délutáni mérésen résztvevők",
+      valtozo = "testhőmérséklet",
+      egyseg = "°C",
+      mu = round(runif(1, 36.5, 36.9), 1),
+      sd = runif(1, 0.15, 0.35),
+      bevezeto = "Egy alapvető élettani gyakorlat során két hallgatói mintában testhőmérsékletet mértek. A kutatók arra voltak kíváncsiak, hogy az egyes minták átlagos testhőmérséklete eltér-e a normál élettani értékként használt referenciaátlagtól."
+    ),
+    
+    vercukor = list(
+      csoport1 = "Reggeli előtt mért hallgatók",
+      csoport2 = "Késő délelőtt mért hallgatók",
+      valtozo = "éhomi vércukorszint",
+      egyseg = "mmol/L",
+      mu = round(runif(1, 4.8, 5.5), 1),
+      sd = runif(1, 0.25, 0.55),
+      bevezeto = "Egy egészségügyi jellegű oktatási adatfelvételben két hallgatói csoport vércukorszintjét modellezték. A cél annak vizsgálata volt, hogy a minták átlagos értékei megfelelnek-e a normál tartomány középértékeként megadott referenciaértéknek."
+    ),
+    
+    denever_testtomeg = list(
+      csoport1 = "A denevérpopuláció",
+      csoport2 = "B denevérpopuláció",
+      valtozo = "testtömeg",
+      egyseg = "g",
+      mu = round(runif(1, 18, 28), 1),
+      sd = runif(1, 1.5, 3.2),
+      bevezeto = "Egy zoológiai terepi vizsgálat során két denevérpopuláció egyedeinek testtömegét mérték. A kutatók arra voltak kíváncsiak, hogy a két populációból származó minták külön-külön megfelelnek-e a fajra vonatkozó szakirodalmi átlagos testtömegnek."
+    )
+  )
+  
+  # ------------------------------------------------------------
+  # KÜLÖN MU TÉMÁK
+  # ------------------------------------------------------------
+  
+  kulon_mu_temak <- list(
+    
+    testmagassag = list(
+      csoport1 = "Fiúk",
+      csoport2 = "Lányok",
+      valtozo = "testmagasság",
+      egyseg = "cm",
+      mu1 = sample(172:180, 1),
+      mu2 = sample(160:168, 1),
+      sd1 = runif(1, 5, 8),
+      sd2 = runif(1, 5, 8),
+      bevezeto = "Egy auxológiai vizsgálat során fiúk és lányok testmagasságát mérték. A kutatók arra voltak kíváncsiak, hogy a vizsgált minták átlagos testmagassága megfelel-e az adott nemre és életkori csoportra vonatkozó referenciaértékeknek. A két csoportból eltérő elemszámú mintát vettek."
+    ),
+    
+    testtomeg = list(
+      csoport1 = "Férfi hallgatók",
+      csoport2 = "Női hallgatók",
+      valtozo = "testtömeg",
+      egyseg = "kg",
+      mu1 = sample(72:82, 1),
+      mu2 = sample(58:68, 1),
+      sd1 = runif(1, 6, 10),
+      sd2 = runif(1, 5, 9),
+      bevezeto = "Egy humánbiológiai mérési gyakorlat során férfi és női hallgatók testtömegét vizsgálták. A cél annak megállapítása volt, hogy a két minta külön-külön megfelel-e a nemekre jellemző átlagos referenciaértékeknek."
+    ),
+    
+    kezszorito_ero = list(
+      csoport1 = "Férfi hallgatók",
+      csoport2 = "Női hallgatók",
+      valtozo = "kézszorító erő",
+      egyseg = "kg",
+      mu1 = sample(38:48, 1),
+      mu2 = sample(24:34, 1),
+      sd1 = runif(1, 4, 7),
+      sd2 = runif(1, 3, 6),
+      bevezeto = "Egy sportélettani gyakorlat során férfi és női hallgatók kézszorító erejét mérték. A kutatók azt vizsgálták, hogy a mért értékek külön-külön megfelelnek-e a nemekre jellemző szakirodalmi referenciaértékeknek."
+    ),
+    
+    vo2max = list(
+      csoport1 = "Sportoló hallgatók",
+      csoport2 = "Nem sportoló hallgatók",
+      valtozo = "becsült VO2 max",
+      egyseg = "ml/kg/min",
+      mu1 = sample(48:58, 1),
+      mu2 = sample(32:42, 1),
+      sd1 = runif(1, 4, 7),
+      sd2 = runif(1, 4, 7),
+      bevezeto = "Egy sportélettani vizsgálat során sportoló és nem sportoló hallgatók becsült aerob kapacitását vizsgálták. A kutatók arra voltak kíváncsiak, hogy az egyes csoportok átlagos értékei megfelelnek-e a csoportokra jellemző referenciaátlagoknak."
+    ),
+    
+    pulzus_csoport = list(
+      csoport1 = "Sportoló hallgatók",
+      csoport2 = "Nem sportoló hallgatók",
+      valtozo = "nyugalmi pulzus",
+      egyseg = "ütés/perc",
+      mu1 = sample(55:64, 1),
+      mu2 = sample(68:76, 1),
+      sd1 = runif(1, 4, 7),
+      sd2 = runif(1, 5, 8),
+      bevezeto = "Egy élettani felmérésben sportoló és nem sportoló hallgatók nyugalmi pulzusát rögzítették. A vizsgálat célja annak eldöntése volt, hogy a két csoport külön-külön megfelel-e a saját csoportjára jellemző elméleti átlagértéknek."
+    ),
+    
+    testzsir = list(
+      csoport1 = "Férfi hallgatók",
+      csoport2 = "Női hallgatók",
+      valtozo = "testzsír százalék",
+      egyseg = "%",
+      mu1 = sample(14:20, 1),
+      mu2 = sample(22:30, 1),
+      sd1 = runif(1, 3, 5),
+      sd2 = runif(1, 3, 6),
+      bevezeto = "Egy testösszetételt vizsgáló humánbiológiai gyakorlat során férfi és női hallgatók testzsír százalékát modellezték. A cél annak megállapítása volt, hogy a minták átlagai megfelelnek-e az adott csoportra jellemző referenciaértékeknek."
+    ),
+    
+    reakcioido_csoport = list(
+      csoport1 = "Rendszeresen sportoló hallgatók",
+      csoport2 = "Keveset mozgó hallgatók",
+      valtozo = "reakcióidő",
+      egyseg = "ms",
+      mu1 = sample(seq(220, 250, by = 5), 1),
+      mu2 = sample(seq(250, 290, by = 5), 1),
+      sd1 = runif(1, 15, 28),
+      sd2 = runif(1, 18, 35),
+      bevezeto = "Egy kognitív és életmódbeli vizsgálat során két eltérő aktivitású hallgatói csoport reakcióidejét mérték. A kutatók azt vizsgálták, hogy az egyes csoportok átlagos reakcióideje megfelel-e a saját csoportra meghatározott referenciaértéknek."
+    )
+  )
+  
+  # ------------------------------------------------------------
+  # TÉMA KIVÁLASZTÁSA ÉS ADATGENERÁLÁS
+  # ------------------------------------------------------------
+  
+  if (mu_tipus == "azonos_mu") {
+    
+    tema <- sample(azonos_mu_temak, 1)[[1]]
+    
+    mu1 <- tema$mu
+    mu2 <- tema$mu
+    
+    elteres1 <- sample(c(-1, 1), 1) * runif(1, 0.15, 0.65)
+    elteres2 <- sample(c(-1, 1), 1) * runif(1, 0.15, 0.65)
+    
+    atlag1 <- mu1 + elteres1 * tema$sd
+    atlag2 <- mu2 + elteres2 * tema$sd
+    
+    A <- round(rnorm(n1, mean = atlag1, sd = tema$sd), 1)
+    B <- round(rnorm(n2, mean = atlag2, sd = tema$sd), 1)
+    
+    csoport1 <- tema$csoport1
+    csoport2 <- tema$csoport2
+    valtozo <- tema$valtozo
+    egyseg <- tema$egyseg
+    
+    bevezeto <- tema$bevezeto
+    
+    referencia_szoveg <- paste0(
+      "# Mindkét csoport esetében ugyanaz a referenciaérték használandó.\n",
+      "# Referenciaérték: ", mu1, " ", egyseg, "\n"
+    )
+    
+  } else {
+    
+    tema <- sample(kulon_mu_temak, 1)[[1]]
+    
+    mu1 <- tema$mu1
+    mu2 <- tema$mu2
+    
+    elteres1 <- sample(c(-1, 1), 1) * runif(1, 0.15, 0.65)
+    elteres2 <- sample(c(-1, 1), 1) * runif(1, 0.15, 0.65)
+    
+    atlag1 <- mu1 + elteres1 * tema$sd1
+    atlag2 <- mu2 + elteres2 * tema$sd2
+    
+    A <- round(rnorm(n1, mean = atlag1, sd = tema$sd1), 1)
+    B <- round(rnorm(n2, mean = atlag2, sd = tema$sd2), 1)
+    
+    csoport1 <- tema$csoport1
+    csoport2 <- tema$csoport2
+    valtozo <- tema$valtozo
+    egyseg <- tema$egyseg
+    
+    bevezeto <- tema$bevezeto
+    
+    referencia_szoveg <- paste0(
+      "# A két csoporthoz eltérő referenciaérték tartozik.\n",
+      "# ", csoport1, " referenciaértéke: ", mu1, " ", egyseg, "\n",
+      "# ", csoport2, " referenciaértéke: ", mu2, " ", egyseg, "\n"
+    )
+  }
+  
+  adat_teszt <- data.frame(
+    Csoport = c(rep(csoport1, n1), rep(csoport2, n2)),
+    Ertek = c(A, B)
+  )
+  
+  # ------------------------------------------------------------
+  # SZÖVEG
+  # ------------------------------------------------------------
+  
+  szoveg <- paste0(
+    "# Statisztikai próba választása referenciaérték alapján\n",
+    "#\n",
+    "# ", bevezeto, "\n",
+    "# A vizsgált változó: ", valtozo, " (", egyseg, ").\n",
+    "# Az adatok az adat_teszt nevű data.frame-ben találhatók.\n",
+    "# A két minta elemszáma eltérő: ", csoport1, " n = ", n1, ", ", csoport2, " n = ", n2, ".\n",
+    "#\n",
+    referencia_szoveg,
+    "#\n",
+    "# ", csoport1, ":\n",
+    "# ", paste(A, collapse = ", "), "\n",
+    "#\n",
+    "# ", csoport2, ":\n",
+    "# ", paste(B, collapse = ", "), "\n",
+    "#\n",
+    "# Feladatok:\n",
+    "# - Ábrázolja a két adatsort közös boxplot ábrán. (1 pont)\n",
+    "# - Vizsgálja meg mindkét adatsor normalitását. (2 pont)\n",
+    "# - Fogalmazza meg a megfelelő null- és alternatív hipotéziseket mindkét mintára. (2 pont)\n",
+    "# - Válassza ki és végezze el a megfelelő statisztikai próbát mindkét adatsorra. (3 pont)\n",
+    "# - Hasonlítsa össze, melyik csoport tér el jobban a saját referenciaértékétől. (1 pont)\n",
+    "# - Értelmezze az eredményeket biológiai szempontból. (1 pont)\n\n"
+  )
+  
+  megoldas <- data.frame(
+    Csoport = c(csoport1, csoport2),
+    Mu = c(mu1, mu2),
+    Atlag = c(mean(A), mean(B)),
+    Shapiro_p = c(shapiro.test(A)$p.value, shapiro.test(B)$p.value),
+    T_p = c(t.test(A, mu = mu1)$p.value, t.test(B, mu = mu2)$p.value)
+  )
+  
+  list(
+    adat = adat_teszt,
+    szoveg = szoveg,
+    tipus = "egymintas_referencia",
+    mu_tipus = mu_tipus,
+    megoldas = megoldas
+  )
+}
+
+# ============================================================
 # FELADATLISTA ÖSSZEÁLLÍTÁSA
 # ============================================================
 
 # Két kötelező feladat
 fix_feladatok <- c("korrelacio", "adatmatrix")
 
-# Később ide kerülnek majd a választható random feladatok
-random_feladatok <- character(0)
+# Nem fix / választható feladatok
+# Most még csak az egymintás referenciaértékes feladat van benne,
+# ezért ezt fogja kiválasztani.
+random_feladatok <- c("egymintas")
 
-# Jelenleg csak a két fix feladat kerül be
-# Később majd ez lesz:
-# valasztott_random <- sample(random_feladatok, 2, replace = FALSE)
-# vegso_feladatok <- sample(c(fix_feladatok, valasztott_random), 4)
+# Jelenleg 1 random feladatot választunk.
+# Később, ha több választható feladat lesz, csak ide kell őket beírni.
+valasztott_random <- sample(random_feladatok, 1, replace = FALSE)
 
-vegso_feladatok <- fix_feladatok
+# Végső feladatlista
+vegso_feladatok <- c(fix_feladatok, valasztott_random)
 
-# A feladatok sorrendjét már most is összekeverhetjük
+# A feladatok sorrendjét összekeverjük
 vegso_feladatok <- sample(vegso_feladatok, length(vegso_feladatok), replace = FALSE)
 
 # ============================================================
@@ -505,6 +809,23 @@ for (feladat in vegso_feladatok) {
       "# ", feladat_sorszam, ". feladat\n",
       adatmatrix$szoveg
     )
+  }
+  
+  if (feladat == "egymintas") {
+    
+    egymintas <- general_egymintas_feladat(seed + feladat_sorszam)
+    
+    # Fontos: adat_ előtag kell, hogy a HB_DATA kitegye az Environment-be
+    adat_egymintas <- egymintas$adat
+    
+    feladat_szoveg <- paste0(
+      feladat_szoveg,
+      "# ", feladat_sorszam, ". feladat\n",
+      egymintas$szoveg
+    )
+    
+    # Tanári célra, nem kerül ki automatikusan, mert nem adat_ előtagú
+    megoldas_egymintas <- egymintas$megoldas
   }
   
   feladat_sorszam <- feladat_sorszam + 1
