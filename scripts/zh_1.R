@@ -10,7 +10,6 @@ feladat_szoveg <- paste0(
   "# ============================================================\n",
   "# Humánbiológia II. – Alkalmazott biometria ZH\n",
   "# Neptun: ", neptun, "\n",
-  "# ZH: ", ZH, "\n",
   "# Seed: ", seed, "\n",
   "# ============================================================\n",
   "# Elérhető maximum pontszám: 40 pont (100%)\n",
