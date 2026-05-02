@@ -752,6 +752,349 @@ general_egymintas_feladat <- function(seed) {
 }
 
 # ============================================================
+# TESZTVÁLASZTÁS FELADAT – KÉTMINTÁS PRÓBA / MANN–WHITNEY–WILCOXON
+# 2×2 adatsor:
+# K1 csoport: A és B minta, azonos elemszámmal
+# K2 csoport: A és B minta, azonos elemszámmal
+# K1 és K2 elemszáma eltérő
+# A és B minták függetlenek, NEM párosítottak
+# ============================================================
+
+general_ketmintas_feladat <- function(seed) {
+  
+  set.seed(seed + 404)
+  
+  # ------------------------------------------------------------
+  # Témák
+  # ------------------------------------------------------------
+  
+  ketmintas_temak <- list(
+    
+    pulzus = list(
+      csoport1 = "Sporttudomány szakos hallgatók",
+      csoport2 = "Biológia szakos hallgatók",
+      mintaA = "délelőtti mérés",
+      mintaB = "délutáni mérés",
+      valtozo = "nyugalmi pulzus",
+      egyseg = "ütés/perc",
+      minv = 48,
+      maxv = 95,
+      alap_atlag = 68,
+      alap_sd = 7,
+      bevezeto = paste0(
+        "Egy élettani jellegű egyetemi vizsgálat során hallgatók nyugalmi pulzusát mérték. ",
+        "A kutatók arra voltak kíváncsiak, hogy két különböző hallgatói csoportban eltérnek-e egymástól ",
+        "a különböző időpontokban, de egymástól független személyeken mért pulzusértékek. ",
+        "A mérések során az A és B minták nem ugyanazoktól a hallgatóktól származnak, ezért az összehasonlításokat ",
+        "független mintákra vonatkozó próbával kell elvégezni."
+      )
+    ),
+    
+    reakcioido = list(
+      csoport1 = "Kipihent hallgatók",
+      csoport2 = "Alváshiányos hallgatók",
+      mintaA = "egyszerű vizuális inger",
+      mintaB = "összetett vizuális inger",
+      valtozo = "reakcióidő",
+      egyseg = "ms",
+      minv = 180,
+      maxv = 420,
+      alap_atlag = 270,
+      alap_sd = 35,
+      bevezeto = paste0(
+        "Egy kognitív teljesítményt vizsgáló kutatásban hallgatók reakcióidejét mérték. ",
+        "A vizsgálat célja annak megállapítása volt, hogy az egyszerűbb és összetettebb ingerhelyzetekhez tartozó ",
+        "reakcióidők között kimutatható-e eltérés két különböző hallgatói csoportban. ",
+        "Az A és B minták független részmintákból származnak, tehát nem ugyanazon személyek ismételt mérései."
+      )
+    ),
+    
+    alvasido = list(
+      csoport1 = "Kollégista hallgatók",
+      csoport2 = "Bejáró hallgatók",
+      mintaA = "vizsgaidőszakon kívüli hét",
+      mintaB = "vizsgaidőszak hete",
+      valtozo = "napi alvásidő",
+      egyseg = "óra",
+      minv = 3.5,
+      maxv = 10,
+      alap_atlag = 7,
+      alap_sd = 1.1,
+      bevezeto = paste0(
+        "Egy hallgatói életmódfelmérésben a napi alvásidő alakulását vizsgálták. ",
+        "A kutatók két különböző hallgatói csoportban hasonlították össze a vizsgaidőszakon kívüli és a vizsgaidőszakban ",
+        "gyűjtött, egymástól független mintákat. ",
+        "A cél annak eldöntése volt, hogy az A és B minták eloszlása, illetve középértéke eltér-e egymástól."
+      )
+    ),
+    
+    testzsir = list(
+      csoport1 = "Rendszeresen sportoló hallgatók",
+      csoport2 = "Keveset mozgó hallgatók",
+      mintaA = "A mérőcsoport",
+      mintaB = "B mérőcsoport",
+      valtozo = "testzsír százalék",
+      egyseg = "%",
+      minv = 8,
+      maxv = 38,
+      alap_atlag = 22,
+      alap_sd = 5,
+      bevezeto = paste0(
+        "Egy testösszetétellel kapcsolatos humánbiológiai gyakorlat során hallgatók testzsír százalékát becsülték. ",
+        "A vizsgálatban két hallgatói csoport szerepelt, és mindkét csoportban két egymástól független mintát hasonlítottak össze. ",
+        "A kutatók azt szerették volna eldönteni, hogy az A és B minták alapján kimutatható-e statisztikailag igazolható eltérés."
+      )
+    ),
+    
+    kezszorito = list(
+      csoport1 = "Férfi hallgatók",
+      csoport2 = "Női hallgatók",
+      mintaA = "domináns kézzel mért minta",
+      mintaB = "nem domináns kézzel mért minta",
+      valtozo = "kézszorító erő",
+      egyseg = "kg",
+      minv = 12,
+      maxv = 65,
+      alap_atlag = 36,
+      alap_sd = 8,
+      bevezeto = paste0(
+        "Egy sportélettani mérés során hallgatók kézszorító erejét vizsgálták. ",
+        "A kutatók két csoportban elemezték, hogy az A és B független minták között kimutatható-e eltérés. ",
+        "A mérések nem ugyanazon személyek két kezéről származnak, hanem külön részmintákból, ezért nem különbségen alapuló próbát kell alkalmazni."
+      )
+    ),
+    
+    lepesszam = list(
+      csoport1 = "Elsőéves hallgatók",
+      csoport2 = "Felsőbb éves hallgatók",
+      mintaA = "hétköznapi napokon mért minta",
+      mintaB = "hétvégi napokon mért minta",
+      valtozo = "napi lépésszám",
+      egyseg = "lépés",
+      minv = 1000,
+      maxv = 18000,
+      alap_atlag = 8000,
+      alap_sd = 2200,
+      bevezeto = paste0(
+        "Egy fizikai aktivitással kapcsolatos felmérésben a hallgatók napi lépésszámát vizsgálták. ",
+        "A kutatók két hallgatói csoportban hasonlították össze a hétköznapi és hétvégi napokon mért, ",
+        "egymástól független mintákat. ",
+        "A cél annak eldöntése volt, hogy az A és B minták között statisztikailag kimutatható-e eltérés."
+      )
+    ),
+    
+    nyugdijas_aktivitas = list(
+      csoport1 = "városi nyugdíjasotthon lakói",
+      csoport2 = "kistelepülési nyugdíjasotthon lakói",
+      mintaA = "délelőtti aktivitási csoport",
+      mintaB = "délutáni aktivitási csoport",
+      valtozo = "napi séta időtartama",
+      egyseg = "perc",
+      minv = 0,
+      maxv = 140,
+      alap_atlag = 55,
+      alap_sd = 22,
+      bevezeto = paste0(
+        "Egy idősödéssel kapcsolatos humánbiológiai és életmódbeli felmérés során nyugdíjasotthonok lakóinak napi sétával töltött idejét vizsgálták. ",
+        "A kutatók két intézménytípusban hasonlították össze az A és B független mintákat. ",
+        "Az adatok alapján el kell dönteni, hogy a minták közötti eltérés vizsgálható-e kétmintás t-próbával, vagy nemparaméteres próba szükséges."
+      )
+    )
+  )
+  
+  tema <- sample(ketmintas_temak, 1)[[1]]
+  
+  # ------------------------------------------------------------
+  # Elemszámok
+  # K1-en belül A és B azonos n
+  # K2-n belül A és B azonos n
+  # K1 és K2 eltérő n
+  # ------------------------------------------------------------
+  
+  n_K1 <- sample(18:28, 1)
+  n_K2 <- sample(30:42, 1)
+  
+  if (sample(c(TRUE, FALSE), 1)) {
+    temp <- n_K1
+    n_K1 <- n_K2
+    n_K2 <- temp
+  }
+  
+  # ------------------------------------------------------------
+  # Normalitási helyzet
+  # Lehet:
+  # - mindkét csoport normális: kétmintás t-próba mindkettőre
+  # - K1 nem normális: K1 MWW, K2 t-próba
+  # - K2 nem normális: K1 t-próba, K2 MWW
+  # - mindkettő nem normális: MWW mindkettőre
+  # ------------------------------------------------------------
+  
+  normalitas_tipus <- sample(c(
+    "mind_normalis",
+    "K1_nemnormalis",
+    "K2_nemnormalis",
+    "mind_nemnormalis"
+  ), 1)
+  
+  K1_normalis <- normalitas_tipus %in% c("mind_normalis", "K2_nemnormalis")
+  K2_normalis <- normalitas_tipus %in% c("mind_normalis", "K1_nemnormalis")
+  
+  # ------------------------------------------------------------
+  # Adatgeneráló segédfüggvények
+  # ------------------------------------------------------------
+  
+  gen_normalis <- function(n, atlag, sd, minv, maxv) {
+    x <- rnorm(n, mean = atlag, sd = sd)
+    x[x < minv] <- minv
+    x[x > maxv] <- maxv
+    round(x, 1)
+  }
+  
+  gen_nemnormalis <- function(n, atlag, sd, minv, maxv) {
+    # jobbra ferde, outlier-jellegű eloszlás
+    x <- rgamma(n, shape = 2.2, scale = sd / 1.4)
+    x <- x - mean(x) + atlag
+    
+    # néhány szélső érték
+    out_n <- max(1, round(n * 0.10))
+    idx <- sample(seq_len(n), out_n)
+    x[idx] <- x[idx] + runif(out_n, 1.8 * sd, 3.2 * sd)
+    
+    x[x < minv] <- minv
+    x[x > maxv] <- maxv
+    round(x, 1)
+  }
+  
+  gen_par <- function(n, normalis, alap_atlag, alap_sd, minv, maxv) {
+    
+    kulonbseg <- sample(c(-0.7, -0.4, 0, 0.4, 0.7), 1) * alap_sd
+    
+    atlag_A <- alap_atlag + runif(1, -0.4 * alap_sd, 0.4 * alap_sd)
+    atlag_B <- atlag_A + kulonbseg
+    
+    if (normalis) {
+      A <- gen_normalis(n, atlag_A, alap_sd, minv, maxv)
+      B <- gen_normalis(n, atlag_B, alap_sd, minv, maxv)
+    } else {
+      A <- gen_nemnormalis(n, atlag_A, alap_sd, minv, maxv)
+      B <- gen_nemnormalis(n, atlag_B, alap_sd, minv, maxv)
+    }
+    
+    list(A = A, B = B)
+  }
+  
+  K1 <- gen_par(
+    n = n_K1,
+    normalis = K1_normalis,
+    alap_atlag = tema$alap_atlag,
+    alap_sd = tema$alap_sd,
+    minv = tema$minv,
+    maxv = tema$maxv
+  )
+  
+  K2 <- gen_par(
+    n = n_K2,
+    normalis = K2_normalis,
+    alap_atlag = tema$alap_atlag + runif(1, -0.3 * tema$alap_sd, 0.3 * tema$alap_sd),
+    alap_sd = tema$alap_sd,
+    minv = tema$minv,
+    maxv = tema$maxv
+  )
+  
+  K1_A <- K1$A
+  K1_B <- K1$B
+  K2_A <- K2$A
+  K2_B <- K2$B
+  
+  # ------------------------------------------------------------
+  # Data.frame
+  # ------------------------------------------------------------
+  
+  adat_teszt <- data.frame(
+    Csoport = c(
+      rep("K1", length(K1_A) + length(K1_B)),
+      rep("K2", length(K2_A) + length(K2_B))
+    ),
+    Minta = c(
+      rep("A", length(K1_A)),
+      rep("B", length(K1_B)),
+      rep("A", length(K2_A)),
+      rep("B", length(K2_B))
+    ),
+    Ertek = c(K1_A, K1_B, K2_A, K2_B)
+  )
+  
+  # ------------------------------------------------------------
+  # Feladatszöveg
+  # ------------------------------------------------------------
+  
+  szoveg <- paste0(
+    "# Statisztikai próba választása két független minta összehasonlításához\n",
+    "#\n",
+    "# ", tema$bevezeto, "\n",
+    "# A vizsgált változó: ", tema$valtozo, " (", tema$egyseg, ").\n",
+    "# Az adatok az adat_ketmintas nevű data.frame-ben találhatók.\n",
+    "#\n",
+    "# Fontos: az A és B minták egymástól függetlenek. Nem ugyanazon személyek ismételt mérései.\n",
+    "# Ezért különbségen alapuló vagy párosított próbát itt nem szabad alkalmazni.\n",
+    "#\n",
+    "# A K1 csoportban az A és B minta elemszáma azonos: n = ", n_K1, ".\n",
+    "# A K2 csoportban az A és B minta elemszáma azonos: n = ", n_K2, ".\n",
+    "# A K1 és K2 csoport elemszáma eltérő.\n",
+    "#\n",
+    "# Csoportok:\n",
+    "# K1: ", tema$csoport1, "\n",
+    "# K2: ", tema$csoport2, "\n",
+    "#\n",
+    "# Minták jelentése:\n",
+    "# A minta: ", tema$mintaA, "\n",
+    "# B minta: ", tema$mintaB, "\n",
+    "#\n",
+    "# K1 csoport\n",
+    "# A minta: ", paste(K1_A, collapse = ", "), "\n",
+    "# B minta: ", paste(K1_B, collapse = ", "), "\n",
+    "#\n",
+    "# K2 csoport\n",
+    "# A minta: ", paste(K2_A, collapse = ", "), "\n",
+    "# B minta: ", paste(K2_B, collapse = ", "), "\n",
+    "#\n",
+    "# Feladatok:\n",
+    "# - Olvassa le az adatokat, és ellenőrizze a csoportok, minták elemszámát. (1 pont)\n",
+    "# - Vizsgálja meg mind a négy adatsor normalitását. (2 pont)\n",
+    "# - Fogalmazza meg a megfelelő null- és alternatív hipotéziseket a K1 és K2 csoport összehasonlításához. (2 pont)\n",
+    "# - Hasonlítsa össze a K1 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
+    "# - Hasonlítsa össze a K2 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
+    "# - Ábrázolja mind a négy adatsort egy közös boxplot ábrán, és röviden értelmezze az eredményeket. (1 pont)\n\n"
+  )
+  
+  # ------------------------------------------------------------
+  # Tanári megoldási segédlet
+  # Nem kerül ki automatikusan a hallgatónak, mert nem adat_ előtagú
+  # ------------------------------------------------------------
+  
+  megoldas <- data.frame(
+    Csoport = c("K1", "K2"),
+    Normalitas_generalt = c(K1_normalis, K2_normalis),
+    Javasolt_proba = c(
+      ifelse(K1_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba"),
+      ifelse(K2_normalis, "kétmintás t-próba", "Mann–Whitney–Wilcoxon próba")
+    ),
+    Shapiro_A_p = c(shapiro.test(K1_A)$p.value, shapiro.test(K2_A)$p.value),
+    Shapiro_B_p = c(shapiro.test(K1_B)$p.value, shapiro.test(K2_B)$p.value),
+    T_teszt_p = c(t.test(K1_A, K1_B)$p.value, t.test(K2_A, K2_B)$p.value),
+    MWW_p = c(wilcox.test(K1_A, K1_B)$p.value, wilcox.test(K2_A, K2_B)$p.value)
+  )
+  
+  list(
+    adat = adat_teszt,
+    szoveg = szoveg,
+    tipus = "ketmintas_vagy_mww",
+    normalitas_tipus = normalitas_tipus,
+    megoldas = megoldas
+  )
+}
+
+# ============================================================
 # FELADATLISTA ÖSSZEÁLLÍTÁSA
 # ============================================================
 
@@ -761,7 +1104,7 @@ fix_feladatok <- c("korrelacio", "adatmatrix")
 # Nem fix / választható feladatok
 # Most még csak az egymintás referenciaértékes feladat van benne,
 # ezért ezt fogja kiválasztani.
-random_feladatok <- c("egymintas")
+random_feladatok <- c("egymintas","ketmintas")
 
 # Jelenleg 1 random feladatot választunk.
 # Később, ha több választható feladat lesz, csak ide kell őket beírni.
@@ -829,4 +1172,19 @@ for (feladat in vegso_feladatok) {
   }
   
   feladat_sorszam <- feladat_sorszam + 1
+}
+
+if (feladat == "ketmintas") {
+  
+  ketmintas <- general_ketmintas_feladat(seed + feladat_sorszam)
+  
+  adat_ketmintas <- ketmintas$adat
+  
+  feladat_szoveg <- paste0(
+    feladat_szoveg,
+    "# ", feladat_sorszam, ". feladat\n",
+    ketmintas$szoveg
+  )
+  
+  megoldas_ketmintas <- ketmintas$megoldas
 }
