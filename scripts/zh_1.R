@@ -1533,8 +1533,7 @@ general_abra_feladat <- function(seed) {
     "#\n",
     "# Feladatok:\n",
     "# - Olvassa le az eredményeket az oszlopdiagramról. (1 pont)\n",
-    "# - Számolja ki és adja meg a(z) ", tema$csoport1, " és a(z) ", tema$csoport2,
-    " csoportlétszámát külön, illetve a teljes válaszadói létszámot. (1 pont)\n",
+    "# - Határozza meg, melyik pontkategóriában volt a legnagyobb és a legkisebb eltérés a két csoport válaszadói száma között. Adja meg az eltérés nagyságát is. (1 pont)\n",
     "# - Számolja ki és adja meg a(z) ", tema$csoport1, " és a(z) ", tema$csoport2,
     " csoportokra vonatkozó gyakoriságot és relatív gyakoriságot, illetve a teljes csoportra vonatkozó gyakoriságot és relatív gyakoriságot az egyes eredmények függvényében. (2 pont)\n",
     "# - Készítsen az eredményekből egy adatmátrixot a következő oszlopokkal: Eredmények, ",
@@ -1544,7 +1543,7 @@ general_abra_feladat <- function(seed) {
     " pontnál magasabbra értékelték a(z) ", tema$meres,
     ", majd adja meg, hogy összesen hány válaszadó tartozik ide. (1 pont)\n",
     "# - Számolja ki és adja meg mennyi a(z) ", stat_csoport, " ", stat_tipus, " ", stat_muvelet, ". (1 pont)\n",
-    "# - Ábrázolja kördiagramon a(z) ", pie_csoport, " gyakorisági vagy relatív gyakorisági megoszlását. (1 pont)\n",
+    "# - Ábrázolja kördiagramon a(z) ", pie_csoport, " relatív gyakorisági megoszlását. (1 pont)\n",
     "# ============================================================\n\n"
   )
   
