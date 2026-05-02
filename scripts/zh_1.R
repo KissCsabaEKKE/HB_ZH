@@ -12,6 +12,14 @@ feladat_szoveg <- paste0(
   "# Neptun: ", neptun, "\n",
   "# ZH: ", ZH, "\n",
   "# Seed: ", seed, "\n",
+  "# ============================================================\n",
+  "# Elérhető maximum pontszám: 40 pont (100%)\n",
+  "# 1 => 20 pont alatt (50 % alatt)\n",
+  "# 2 => 20 - 24 pont (50 % felett)\n",
+  "# 2 => 25 - 28 pont (60 % felett)\n",
+  "# 3 => 29 - 32 pont (70 % felett)\n",
+  "# 4 => 33 - 36 pont (80 % felett)\n",
+  "# 5 => 37 - 40 pont (90 % felett)\n",
   "# ============================================================\n\n"
 )
 
