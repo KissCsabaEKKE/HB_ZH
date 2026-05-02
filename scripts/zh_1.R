@@ -1108,6 +1108,282 @@ general_ketmintas_feladat <- function(seed) {
 }
 
 # ============================================================
+# TESZTVÁLASZTÁS FELADAT – KÜLÖNBSÉGEN ALAPULÓ / PÁROS HELYZET
+# 2×2 adatsor:
+# K1 csoport: A és B mérés ugyanazon egyedeken
+# K2 csoport: A és B mérés ugyanazon egyedeken
+# K1 és K2 elemszáma eltérhet
+# ============================================================
+
+general_paros_feladat <- function(seed) {
+  
+  set.seed(seed + 505)
+  
+  paros_temak <- list(
+    
+    vernyomas = list(
+      csoport1 = "K1 betegcsoport",
+      csoport2 = "K2 betegcsoport",
+      mintaA = "kezelés előtti mérés",
+      mintaB = "kezelés utáni mérés",
+      valtozo = "szisztolés vérnyomás",
+      egyseg = "Hgmm",
+      alap_atlag = 145,
+      alap_sd = 12,
+      minv = 95,
+      maxv = 210,
+      bevezeto = paste0(
+        "Egy humánbiológiai vizsgálat során egy új vérnyomáscsökkentő készítmény hatását vizsgálták. ",
+        "A kutatásba két külön betegcsoportot vontak be. Mindkét csoportban ugyanazon személyeknél rögzítettek ",
+        "egy A és egy B mérési sorozatot, eltérő időpontokban. A kutatók arra voltak kíváncsiak, hogy a mérési ",
+        "eredmények alapján kimutatható-e változás a vizsgált élettani mutatóban."
+      )
+    ),
+    
+    reakcioido = list(
+      csoport1 = "K1 tréningcsoport",
+      csoport2 = "K2 tréningcsoport",
+      mintaA = "tréning előtti mérés",
+      mintaB = "tréning utáni mérés",
+      valtozo = "reakcióidő",
+      egyseg = "ms",
+      alap_atlag = 280,
+      alap_sd = 32,
+      minv = 160,
+      maxv = 430,
+      bevezeto = paste0(
+        "Egy kognitív teljesítményt vizsgáló kutatás során reakcióidő-tréning hatását elemezték. ",
+        "A vizsgálatban két hallgatói csoport vett részt. Mindkét csoportban ugyanazon személyek teljesítményét ",
+        "mérték az A és B mérési sorozatban. A cél annak eldöntése volt, hogy a tréninghez kapcsolódó mérési ",
+        "eredmények statisztikailag értelmezhető változást mutatnak-e."
+      )
+    ),
+    
+    alvas = list(
+      csoport1 = "K1 életmódprogram",
+      csoport2 = "K2 életmódprogram",
+      mintaA = "program előtti mérés",
+      mintaB = "program utáni mérés",
+      valtozo = "napi alvásidő",
+      egyseg = "óra",
+      alap_atlag = 6.5,
+      alap_sd = 1.0,
+      minv = 3.5,
+      maxv = 10,
+      bevezeto = paste0(
+        "Egy életmódbeli beavatkozást vizsgáló kutatás során két csoport alvási szokásait elemezték. ",
+        "A kutatók minden résztvevőnél két mérési sorozatot rögzítettek: egyet a program előtt, egyet pedig a program után. ",
+        "A vizsgálat célja az volt, hogy megállapítsák, a mérési eredmények alapján kimutatható-e változás az alvásidőben."
+      )
+    ),
+    
+    testtomeg = list(
+      csoport1 = "K1 étrendprogram",
+      csoport2 = "K2 étrendprogram",
+      mintaA = "program előtti mérés",
+      mintaB = "program utáni mérés",
+      valtozo = "testtömeg",
+      egyseg = "kg",
+      alap_atlag = 78,
+      alap_sd = 9,
+      minv = 45,
+      maxv = 130,
+      bevezeto = paste0(
+        "Egy táplálkozásbiológiai vizsgálatban két étrendprogram hatását elemezték. ",
+        "A résztvevők testtömegét ugyanazon személyeknél mérték meg az A és B mérési sorozatban. ",
+        "A kutatók célja az volt, hogy statisztikai módszerrel megvizsgálják, történt-e változás a programok után."
+      )
+    ),
+    
+    jarasteszt = list(
+      csoport1 = "városi nyugdíjasotthon lakói",
+      csoport2 = "kistelepülési nyugdíjasotthon lakói",
+      mintaA = "rehabilitáció előtti mérés",
+      mintaB = "rehabilitáció utáni mérés",
+      valtozo = "járásteszt ideje",
+      egyseg = "másodperc",
+      alap_atlag = 18,
+      alap_sd = 4,
+      minv = 7,
+      maxv = 40,
+      bevezeto = paste0(
+        "Egy idősödéssel és mozgásfunkcióval kapcsolatos felmérésben két nyugdíjasotthon lakóit vizsgálták. ",
+        "A kutatók ugyanazon személyeknél rögzítették a járásteszt eredményét az A és B mérési sorozatban. ",
+        "A cél annak megállapítása volt, hogy a rehabilitációs időszak után kimutatható-e változás a teljesítményben."
+      )
+    ),
+    
+    vercukor = list(
+      csoport1 = "K1 életmód-tanácsadási csoport",
+      csoport2 = "K2 életmód-tanácsadási csoport",
+      mintaA = "tanácsadás előtti mérés",
+      mintaB = "tanácsadás utáni mérés",
+      valtozo = "éhomi vércukorszint",
+      egyseg = "mmol/L",
+      alap_atlag = 5.7,
+      alap_sd = 0.6,
+      minv = 3.8,
+      maxv = 8.5,
+      bevezeto = paste0(
+        "Egy egészségfejlesztési programban két csoport éhomi vércukorszintjét követték nyomon. ",
+        "A mérési sorozatok ugyanazon személyekhez tartoznak, az A mérés a program elején, a B mérés pedig később történt. ",
+        "A kutatók azt vizsgálták, hogy az eredmények alapján megfigyelhető-e élettani szempontból értelmezhető változás."
+      )
+    )
+  )
+  
+  tema <- sample(paros_temak, 1)[[1]]
+  
+  n_K1 <- sample(14:24, 1)
+  n_K2 <- sample(25:36, 1)
+  
+  if (sample(c(TRUE, FALSE), 1)) {
+    tmp <- n_K1
+    n_K1 <- n_K2
+    n_K2 <- tmp
+  }
+  
+  paros_variacio <- sample(c(
+    "K1_hat_K2_nincs",
+    "K1_nincs_K2_hat",
+    "mindketto_hat",
+    "egyik_csokken_masik_no",
+    "K1_nemnormalis",
+    "K2_nemnormalis",
+    "mindketto_nemnormalis"
+  ), 1)
+  
+  K1_normalis <- !(paros_variacio %in% c("K1_nemnormalis", "mindketto_nemnormalis"))
+  K2_normalis <- !(paros_variacio %in% c("K2_nemnormalis", "mindketto_nemnormalis"))
+  
+  K1_hatas <- paros_variacio %in% c("K1_hat_K2_nincs", "mindketto_hat", "egyik_csokken_masik_no", "K1_nemnormalis", "mindketto_nemnormalis")
+  K2_hatas <- paros_variacio %in% c("K1_nincs_K2_hat", "mindketto_hat", "egyik_csokken_masik_no", "K2_nemnormalis", "mindketto_nemnormalis")
+  
+  gen_baseline <- function(n, atlag, sd, minv, maxv) {
+    x <- rnorm(n, atlag, sd)
+    x[x < minv] <- minv
+    x[x > maxv] <- maxv
+    round(x, 1)
+  }
+  
+  gen_diff <- function(n, hatas, normalis, sd, irany = NULL) {
+    
+    if (is.null(irany)) {
+      irany <- sample(c(-1, 1), 1)
+    }
+    
+    if (hatas) {
+      diff_mean <- irany * runif(1, 0.45 * sd, 0.90 * sd)
+    } else {
+      diff_mean <- runif(1, -0.10 * sd, 0.10 * sd)
+    }
+    
+    if (normalis) {
+      d <- rnorm(n, mean = diff_mean, sd = runif(1, 0.35 * sd, 0.70 * sd))
+    } else {
+      d <- rgamma(n, shape = 2.0, scale = sd / 3)
+      d <- d - mean(d) + diff_mean
+      out_n <- max(1, round(n * 0.12))
+      idx <- sample(seq_len(n), out_n)
+      d[idx] <- d[idx] + irany * runif(out_n, 1.5 * sd, 2.5 * sd)
+    }
+    
+    round(d, 1)
+  }
+  
+  if (paros_variacio == "egyik_csokken_masik_no") {
+    irany_K1 <- -1
+    irany_K2 <- 1
+  } else {
+    irany_K1 <- sample(c(-1, 1), 1)
+    irany_K2 <- sample(c(-1, 1), 1)
+  }
+  
+  K1_A <- gen_baseline(n_K1, tema$alap_atlag, tema$alap_sd, tema$minv, tema$maxv)
+  K2_A <- gen_baseline(n_K2, tema$alap_atlag + runif(1, -0.3 * tema$alap_sd, 0.3 * tema$alap_sd), tema$alap_sd, tema$minv, tema$maxv)
+  
+  K1_diff <- gen_diff(n_K1, K1_hatas, K1_normalis, tema$alap_sd, irany_K1)
+  K2_diff <- gen_diff(n_K2, K2_hatas, K2_normalis, tema$alap_sd, irany_K2)
+  
+  K1_B <- round(K1_A + K1_diff, 1)
+  K2_B <- round(K2_A + K2_diff, 1)
+  
+  K1_B[K1_B < tema$minv] <- tema$minv
+  K1_B[K1_B > tema$maxv] <- tema$maxv
+  K2_B[K2_B < tema$minv] <- tema$minv
+  K2_B[K2_B > tema$maxv] <- tema$maxv
+  
+  adat_teszt <- data.frame(
+    Csoport = c(rep("K1", n_K1), rep("K2", n_K2)),
+    Szemely = c(seq_len(n_K1), seq_len(n_K2)),
+    A = c(K1_A, K2_A),
+    B = c(K1_B, K2_B)
+  )
+  
+  szoveg <- paste0(
+    "# Statisztikai próba választása két összetartozó mérési sorozat összehasonlításához\n",
+    "#\n",
+    "# ", tema$bevezeto, "\n",
+    "# A vizsgált változó: ", tema$valtozo, " (", tema$egyseg, ").\n",
+    "# Az adatok az adat_teszt nevű data.frame-ben találhatók.\n",
+    "#\n",
+    "# A K1 csoportban az A és B mérés ugyanazon személyekhez tartozik, n = ", n_K1, ".\n",
+    "# A K2 csoportban az A és B mérés ugyanazon személyekhez tartozik, n = ", n_K2, ".\n",
+    "# A K1 és K2 csoport elemszáma eltérhet, de a két csoportot külön kell értékelni.\n",
+    "#\n",
+    "# Csoportok:\n",
+    "# K1: ", tema$csoport1, "\n",
+    "# K2: ", tema$csoport2, "\n",
+    "#\n",
+    "# Mérések jelentése:\n",
+    "# A mérés: ", tema$mintaA, "\n",
+    "# B mérés: ", tema$mintaB, "\n",
+    "#\n",
+    "# K1 csoport\n",
+    "# A mérés: ", paste(K1_A, collapse = ", "), "\n",
+    "# B mérés: ", paste(K1_B, collapse = ", "), "\n",
+    "#\n",
+    "# K2 csoport\n",
+    "# A mérés: ", paste(K2_A, collapse = ", "), "\n",
+    "# B mérés: ", paste(K2_B, collapse = ", "), "\n",
+    "#\n",
+    "# Feladatok:\n",
+    "# - Ábrázolja mind a négy adatsort egy közös boxplot ábrán. (1 pont)\n",
+    "# - Vizsgálja meg mind a négy adatsor normalitását. (2 pont)\n",
+    "# - Fogalmazza meg a megfelelő H0 és H1 hipotéziseket a K1 és K2 csoport összehasonlításához. (2 pont)\n",
+    "# - Hasonlítsa össze a K1 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
+    "# - Hasonlítsa össze a K2 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
+    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n",
+    "# ============================================================\n\n"
+  )
+  
+  megoldas <- data.frame(
+    Csoport = c("K1", "K2"),
+    Variacio = c(paros_variacio, paros_variacio),
+    Kulonbseg_normalis_generalt = c(K1_normalis, K2_normalis),
+    Atlag_A = c(mean(K1_A), mean(K2_A)),
+    Atlag_B = c(mean(K1_B), mean(K2_B)),
+    Atlag_valtozas = c(mean(K1_B - K1_A), mean(K2_B - K2_A)),
+    Shapiro_A_p = c(shapiro.test(K1_A)$p.value, shapiro.test(K2_A)$p.value),
+    Shapiro_B_p = c(shapiro.test(K1_B)$p.value, shapiro.test(K2_B)$p.value),
+    Shapiro_kulonbseg_p = c(shapiro.test(K1_B - K1_A)$p.value, shapiro.test(K2_B - K2_A)$p.value),
+    Paros_t_p = c(t.test(K1_A, K1_B, paired = TRUE)$p.value, t.test(K2_A, K2_B, paired = TRUE)$p.value),
+    Wilcoxon_paros_p = c(
+      suppressWarnings(wilcox.test(K1_A, K1_B, paired = TRUE, exact = FALSE)$p.value),
+      suppressWarnings(wilcox.test(K2_A, K2_B, paired = TRUE, exact = FALSE)$p.value)
+    )
+  )
+  
+  list(
+    adat = adat_teszt,
+    szoveg = szoveg,
+    tipus = "paros_kulonbseg",
+    variacio = paros_variacio,
+    megoldas = megoldas
+  )
+}
+
+# ============================================================
 # FELADATLISTA ÖSSZEÁLLÍTÁSA
 # ============================================================
 
@@ -1117,7 +1393,7 @@ fix_feladatok <- c("korrelacio", "adatmatrix")
 # Nem fix / választható feladatok
 # Most még csak az egymintás referenciaértékes feladat van benne,
 # ezért ezt fogja kiválasztani.
-random_feladatok <- c("egymintas","ketmintas")
+random_feladatok <- c("egymintas","ketmintas","paros")
 
 # Jelenleg 1 random feladatot választunk.
 # Később, ha több választható feladat lesz, csak ide kell őket beírni.
@@ -1190,6 +1466,21 @@ for (feladat in vegso_feladatok) {
     
     megoldas_ketmintas <- ketmintas$megoldas
   }
+  
+  if (feladat == "paros") {
+  
+  paros <- general_paros_feladat(seed + feladat_sorszam)
+  
+  adat_teszt <- paros$adat
+  
+  feladat_szoveg <- paste0(
+    feladat_szoveg,
+    "# ", feladat_sorszam, ". feladat\n",
+    paros$szoveg
+  )
+  
+  megoldas_paros <- paros$megoldas
+}
   
   feladat_sorszam <- feladat_sorszam + 1
 }
