@@ -222,7 +222,8 @@ general_korrelacio_feladat <- function(seed) {
     "# - Készítsen ábrát regressziós egyenessel. (2 pont)\n",
     "# - Vizsgálja a regressziós paraméterek megbízhatóságát. (2 pont)\n",
     "# - Ábrázolja mindkét változó tanszékenkénti értékeit közös boxplot ábrán. (1 pont)\n",
-    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n\n"
+    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n",
+    "# ============================================================\n\n"
   )
   
   list(
@@ -448,7 +449,8 @@ boxplot_szurt2_num <- sample(num_nevek, 1)
     tema$num1_nev, " < ", num1_hatar, ", ",
     tema$num2_nev, " > ", num2_hatar, ". ",
     "Az így kapott adatokból készítsen boxplot ábrát a(z) ", boxplot_szurt2_num, " változóról a(z) ", boxplot_szurt2_kat, " kategóriái szerint. (3 pont)\n",
-    "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n\n"
+    "# - Határozza meg a boxplot ábrán ábrázolt kategóriák gyakoriságát. (1 pont)\n",
+    "# ============================================================\n\n"
   )
   
   list(
@@ -1071,7 +1073,8 @@ general_ketmintas_feladat <- function(seed) {
     "# - Fogalmazza meg a megfelelő H0 és H1 hipotéziseket a K1 és K2 csoport összehasonlításához. (2 pont)\n",
     "# - Hasonlítsa össze a K1 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
     "# - Hasonlítsa össze a K2 csoportban az A és B mintát a megfelelő statisztikai próbával. Indokolja a próba választását. (2 pont)\n",
-    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n\n"
+    "# - Az eredmények alapján melyik hipotézist fogadná el? Értelmezze röviden az eredményeket biológiai vagy viselkedésbiológiai szempontból. (1 pont)\n",
+    "# ============================================================\n\n"
   )
   
   # ------------------------------------------------------------
