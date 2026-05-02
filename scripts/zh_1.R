@@ -536,14 +536,14 @@ general_egymintas_feladat <- function(seed) {
       bevezeto = "Egy egészségügyi jellegű oktatási adatfelvételben két hallgatói csoport vércukorszintjét modellezték. A cél annak vizsgálata volt, hogy a minták átlagos értékei megfelelnek-e a normál tartomány középértékeként megadott referenciaértéknek."
     ),
     
-    denever_testtomeg = list(
-      csoport1 = "A denevérpopuláció",
-      csoport2 = "B denevérpopuláció",
+    pocok_testtomeg = list(
+      csoport1 = "A pocokpopuláció",
+      csoport2 = "B pocokpopuláció",
       valtozo = "testtömeg",
       egyseg = "g",
       mu = round(runif(1, 18, 28), 1),
       sd = runif(1, 1.5, 3.2),
-      bevezeto = "Egy zoológiai terepi vizsgálat során két denevérpopuláció egyedeinek testtömegét mérték. A kutatók arra voltak kíváncsiak, hogy a két populációból származó minták külön-külön megfelelnek-e a fajra vonatkozó szakirodalmi átlagos testtömegnek."
+      bevezeto = "Egy zoológiai terepi vizsgálat során két pocokpopuláció egyedeinek testtömegét mérték. A kutatók arra voltak kíváncsiak, hogy a két populációból származó minták külön-külön megfelelnek-e a fajra vonatkozó szakirodalmi átlagos testtömegnek."
     )
   )
   
@@ -728,7 +728,7 @@ general_egymintas_feladat <- function(seed) {
     "# Feladatok:\n",
     "# - Ábrázolja a két adatsort közös boxplot ábrán. (1 pont)\n",
     "# - Vizsgálja meg mindkét adatsor normalitását. (2 pont)\n",
-    "# - Fogalmazza meg a megfelelő null- és alternatív hipotéziseket mindkét mintára. (2 pont)\n",
+    "# - Fogalmazza meg a megfelelő H0 és H1 hipotéziseket mindkét mintára. (2 pont)\n",
     "# - Válassza ki és végezze el a megfelelő statisztikai próbát mindkét adatsorra. (3 pont)\n",
     "# - Hasonlítsa össze, melyik csoport tér el jobban a saját referenciaértékétől. (1 pont)\n",
     "# - Értelmezze az eredményeket biológiai szempontból. (1 pont)\n\n"
@@ -816,7 +816,7 @@ for (feladat in vegso_feladatok) {
     egymintas <- general_egymintas_feladat(seed + feladat_sorszam)
     
     # Fontos: adat_ előtag kell, hogy a HB_DATA kitegye az Environment-be
-    adat_egymintas <- egymintas$adat
+    adat_teszt <- egymintas$adat
     
     feladat_szoveg <- paste0(
       feladat_szoveg,
