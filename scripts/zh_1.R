@@ -1127,7 +1127,6 @@ for (feladat in vegso_feladatok) {
   if (feladat == "korrelacio") {
     
     kor <- general_korrelacio_feladat(seed + feladat_sorszam)
-    
     adat_korrelacio <- kor$adat
     
     feladat_szoveg <- paste0(
@@ -1136,15 +1135,12 @@ for (feladat in vegso_feladatok) {
       kor$szoveg
     )
     
-    # Tanári célra, nem kerül ki automatikusan, mert nem adat_ előtagú
     megoldas_korrelacio <- kor$megoldas
   }
   
   if (feladat == "adatmatrix") {
     
     adatmatrix <- general_adatmatrix_feladat(seed + feladat_sorszam)
-    
-    # Fontos: adat_ előtag kell, hogy a HB_DATA kitegye az Environment-be
     adat_adatmatrix <- adatmatrix$adat
     
     feladat_szoveg <- paste0(
@@ -1157,8 +1153,6 @@ for (feladat in vegso_feladatok) {
   if (feladat == "egymintas") {
     
     egymintas <- general_egymintas_feladat(seed + feladat_sorszam)
-    
-    # Fontos: adat_ előtag kell, hogy a HB_DATA kitegye az Environment-be
     adat_teszt <- egymintas$adat
     
     feladat_szoveg <- paste0(
@@ -1167,24 +1161,22 @@ for (feladat in vegso_feladatok) {
       egymintas$szoveg
     )
     
-    # Tanári célra, nem kerül ki automatikusan, mert nem adat_ előtagú
     megoldas_egymintas <- egymintas$megoldas
   }
   
+  if (feladat == "ketmintas") {
+    
+    ketmintas <- general_ketmintas_feladat(seed + feladat_sorszam)
+    adat_teszt <- ketmintas$adat
+    
+    feladat_szoveg <- paste0(
+      feladat_szoveg,
+      "# ", feladat_sorszam, ". feladat\n",
+      ketmintas$szoveg
+    )
+    
+    megoldas_ketmintas <- ketmintas$megoldas
+  }
+  
   feladat_sorszam <- feladat_sorszam + 1
-}
-
-if (feladat == "ketmintas") {
-  
-  ketmintas <- general_ketmintas_feladat(seed + feladat_sorszam)
-  
-  adat_ketmintas <- ketmintas$adat
-  
-  feladat_szoveg <- paste0(
-    feladat_szoveg,
-    "# ", feladat_sorszam, ". feladat\n",
-    ketmintas$szoveg
-  )
-  
-  megoldas_ketmintas <- ketmintas$megoldas
 }
