@@ -7,5 +7,5 @@ Szerkezet:
 ```text
 zh_config.csv
 scripts/
-  zh_1.R
+  zh_2.v1.R
 ```
