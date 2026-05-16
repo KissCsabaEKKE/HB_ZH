@@ -207,7 +207,7 @@ general_korrelacio_feladat <- function(seed) {
     "# Az adatok az adat_korrelacio nevű data.frame-ben találhatók.\n",
     "#\n",
     "# Feladatok:\n",
-    "# - Készítsen 4 darab könyvtárat az adat_korrelacio data.frame-ben található 2 tanszék 2 változóiból. (1 pont)\n",
+    "# - Készítsen könyvtárakat az adat_korrelacio data.frame-ben található 2 tanszék 2 változóiból. (1 pont)\n",
     "# - Állítsa fel a H0 és H1 hipotéziseket. (1 pont)\n",
     "# - Határozza meg a korrelációt mindkét tanszéken. (1 pont)\n",
     "# - Készítsen ábrát regressziós egyenessel. (2 pont)\n",
